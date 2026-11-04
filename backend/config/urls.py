@@ -12,4 +12,5 @@ urlpatterns = [
     path('api/accounts/', include('accounts.urls', namespace='accounts')),
     path('api/catalogue/', include('catalogue.urls', namespace='catalogue')),
     path('api/addresses/', include('addresses.urls', namespace='addresses')),
+    path('api/cart/', include('cart.urls', namespace='cart')),
 ]
