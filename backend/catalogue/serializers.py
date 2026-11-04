@@ -85,11 +85,13 @@ class ProductSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
     def get_variants(self, obj):
-        # Only active variants that are in stock or allow zero stock (still visible)
-        qs = obj.variants.filter(is_active=True)
-        return ProductVariantSerializer(qs, many=True).data
+        variants = getattr(obj, "_active_variants", None)
+        if variants is None:
+            variants = obj.variants.filter(is_active=True)
+        return ProductVariantSerializer(variants, many=True).data
 
     def get_images(self, obj):
-        qs = obj.images.all().order_by("sort_order", "id")
-        return ProductImageSerializer(qs, many=True).data
-
+        images = getattr(obj, "_prefetched_images", None)
+        if images is None:
+            images = obj.images.all().order_by("sort_order", "id")
+        return ProductImageSerializer(images, many=True).data

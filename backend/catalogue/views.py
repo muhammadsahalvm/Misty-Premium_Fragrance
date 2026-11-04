@@ -6,8 +6,7 @@ Only read‑only endpoints are exposed – customers cannot modify data.
 from django.db.models import Prefetch, Q, Min, Exists, OuterRef
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions, filters
-from rest_framework.response import Response
-
+from rest_framework.pagination import PageNumberPagination
 from .models import Category, Collection, Product, ProductVariant, ProductImage
 from .serializers import (
     CategorySerializer,
@@ -37,10 +36,14 @@ class CollectionListView(generics.ListAPIView):
 # Product list with filters & search
 # ---------------------------------------------------------------------------
 
+class ProductPagination(PageNumberPagination):
+    page_size = 12
+
+
 class ProductListView(generics.ListAPIView):
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny]
-    pagination_class = None  # use DRF default pagination (configured globally if any)
+    pagination_class = ProductPagination
 
     # DRF built‑in filters for search and ordering (no extra deps)
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
@@ -49,15 +52,26 @@ class ProductListView(generics.ListAPIView):
     ordering = ["-created_at"]
 
     def get_queryset(self):
-        qs = Product.objects.filter(is_active=True).prefetch_related(
-            "category",
+        qs = Product.objects.filter(is_active=True).select_related(
+            "category"
+        ).prefetch_related(
             Prefetch("collections", queryset=Collection.objects.filter(is_active=True)),
-            Prefetch("variants", queryset=ProductVariant.objects.filter(is_active=True)),
-            Prefetch("images", queryset=ProductImage.objects.all()),
+            Prefetch(
+                "variants",
+                queryset=ProductVariant.objects.filter(is_active=True),
+                to_attr="_active_variants",
+            ),
+            Prefetch(
+                "images",
+                queryset=ProductImage.objects.all(),
+                to_attr="_prefetched_images",
+            ),
         ).distinct()
 
         # Ensure product has at least one active variant
-        qs = qs.filter(variants__is_active=True).distinct()
+        qs = qs.filter(variants__is_active=True).annotate(
+            price=Min("variants__price", filter=Q(variants__is_active=True))
+        ).distinct()
 
 
         # --- custom filters via query params ---
@@ -123,11 +137,20 @@ class ProductListView(generics.ListAPIView):
 # ---------------------------------------------------------------------------
 
 class ProductDetailView(generics.RetrieveAPIView):
-    queryset = Product.objects.filter(is_active=True).prefetch_related(
-        "category",
+    queryset = Product.objects.filter(is_active=True).select_related(
+        "category"
+    ).prefetch_related(
         Prefetch("collections", queryset=Collection.objects.filter(is_active=True)),
-        Prefetch("variants", queryset=ProductVariant.objects.filter(is_active=True)),
-        Prefetch("images", queryset=ProductImage.objects.all()),
+        Prefetch(
+            "variants",
+            queryset=ProductVariant.objects.filter(is_active=True),
+            to_attr="_active_variants",
+        ),
+        Prefetch(
+            "images",
+            queryset=ProductImage.objects.all(),
+            to_attr="_prefetched_images",
+        ),
     )
 
     serializer_class = ProductSerializer
