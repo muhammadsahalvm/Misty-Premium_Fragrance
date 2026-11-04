@@ -42,10 +42,13 @@ class CheckoutView(APIView):
                     user=request.user,
                 ),
             )
-            cart = get_object_or_404(
-                Cart.objects.select_for_update(),
-                user=request.user,
+            cart = (
+                Cart.objects.select_for_update()
+                .filter(user=request.user)
+                .first()
             )
+            if cart is None:
+                raise ValidationError({"cart": "Your cart is empty."})
             cart_items = list(
                 CartItem.objects.select_for_update()
                 .filter(cart=cart)
