@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("DB_NAME"),
+        "NAME": os.getenv("DB_NAME", "misty_db"),
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST", "127.0.0.1"),
@@ -103,6 +103,44 @@ DATABASES = {
         },
     }
 }
+
+DB_HOST = DATABASES["default"]["HOST"].strip().lower()
+DB_PORT = str(DATABASES["default"]["PORT"]).strip()
+LOCAL_MYSQL_HOSTS = {"127.0.0.1", "localhost", "::1"}
+IS_LOCAL_MYSQL = DB_HOST in LOCAL_MYSQL_HOSTS and DB_PORT == "3306"
+
+
+def _environment_flag(name):
+    return os.getenv(name, "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _ssl_ca_path():
+    configured_path = os.getenv("DB_SSL_CA", "").strip()
+    if not configured_path:
+        return None
+
+    ca_path = Path(configured_path)
+    if not ca_path.is_absolute():
+        ca_path = BASE_DIR / ca_path
+    if not ca_path.is_file():
+        raise RuntimeError(f"DB_SSL_CA does not point to a readable file: {ca_path}")
+    return str(ca_path)
+
+
+# TiDB Cloud Serverless requires TLS. Its public certificate chain is trusted
+# by the system/client trust store, so do not pass the project CA file here.
+if not IS_LOCAL_MYSQL:
+    db_ssl_mode = os.getenv("DB_SSL_MODE", "REQUIRED").strip().upper()
+    if db_ssl_mode != "REQUIRED":
+        raise RuntimeError(
+            "DB_SSL_MODE must be REQUIRED for TiDB Cloud Serverless"
+        )
+
+    DATABASES["default"]["OPTIONS"]["ssl_mode"] = db_ssl_mode
+elif _environment_flag("DB_USE_SSL"):
+    ca_path = _ssl_ca_path()
+    if ca_path:
+        DATABASES["default"]["OPTIONS"]["ssl"] = {"ca": ca_path}
 
 # Use isolated in-memory SQLite database during automated test execution
 # to preserve production/development data and allow test suite execution without root MySQL privileges
