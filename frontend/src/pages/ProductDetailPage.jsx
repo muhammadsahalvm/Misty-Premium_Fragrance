@@ -16,7 +16,7 @@ function ProductDetailPage() {
   const [selectedVariantId, setSelectedVariantId] = useState(null)
   const [quantity, setQuantity] = useState(1)
   const [message, setMessage] = useState('')
-  const { user, setCart } = useAppContext()
+  const { user, setCart, setWishlist } = useAppContext()
   const navigate = useNavigate()
   const location = useLocation()
   const intentHandled = useRef(false)
@@ -51,7 +51,10 @@ function ProductDetailPage() {
     setQuantity(intent.quantity || 1)
     if (intent.type === 'add_to_wishlist') {
       addWishlistItem(product.id)
-        .then(() => setMessage('Saved to your wishlist.'))
+        .then((nextWishlist) => {
+          setWishlist(nextWishlist)
+          setMessage('Saved to your wishlist.')
+        })
         .catch(() => setMessage('This fragrance could not be saved.'))
         .finally(() => navigate(location.pathname, { replace: true, state: null }))
     } else {
@@ -67,7 +70,7 @@ function ProductDetailPage() {
         })
         .catch((error) => setMessage(Object.values(error.response?.data || {}).flat().join(' ') || 'This fragrance could not be added.'))
     }
-  }, [product, user, intent, navigate, location.pathname, setCart])
+  }, [product, user, intent, navigate, location.pathname, setCart, setWishlist])
 
   if (state === 'loading') {
     return <div className="mx-auto max-w-[1440px] px-6 py-32 text-center text-sm text-charcoal/55">Loading fragrance…</div>
@@ -136,7 +139,7 @@ function ProductDetailPage() {
             ))}
           </div>
         ) : null}
-        {selectedVariant ? <div className="mt-8 space-y-3"><div className="flex items-center gap-5"><label className="text-xs uppercase tracking-editorial" htmlFor="quantity">Quantity</label><input id="quantity" className="w-16 border-b border-charcoal/25 bg-transparent py-2 text-center" type="number" min="1" max={selectedVariant.stock_quantity} value={quantity} onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))} /><button className="button flex-1" onClick={addToCart}>Add to bag</button><button className="border border-charcoal/20 p-3" aria-label="Save to wishlist" onClick={() => { if (requireAuthentication({ type: 'add_to_wishlist', productSlug: slug })) addWishlistItem(product.id).then(() => setMessage('Saved to your wishlist.')) }}><span aria-hidden="true">♡</span></button></div><button className="w-full border border-charcoal px-6 py-3 text-[0.65rem] uppercase tracking-editorial" onClick={async () => { if (await addToCart()) navigate('/checkout', { state: { intent: 'buy_now' } }) }}>Buy now</button></div> : null}
+        {selectedVariant ? <div className="mt-8 space-y-3"><div className="flex items-center gap-5"><label className="text-xs uppercase tracking-editorial" htmlFor="quantity">Quantity</label><input id="quantity" className="w-16 border-b border-charcoal/25 bg-transparent py-2 text-center" type="number" min="1" max={selectedVariant.stock_quantity} value={quantity} onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))} /><button className="button flex-1" onClick={addToCart}>Add to bag</button><button className="border border-charcoal/20 p-3" aria-label="Save to wishlist" onClick={() => { if (requireAuthentication({ type: 'add_to_wishlist', productSlug: slug })) addWishlistItem(product.id).then((nextWishlist) => { setWishlist(nextWishlist); setMessage('Saved to your wishlist.') }) }}><span aria-hidden="true">♡</span></button></div><button className="w-full border border-ink px-6 py-3 text-[0.65rem] uppercase tracking-editorial" onClick={async () => { if (await addToCart()) navigate('/checkout', { state: { intent: 'buy_now' } }) }}>Buy now</button></div> : null}
         {message ? <p className="mt-4 text-sm text-charcoal/60">{message}</p> : null}
         <Link className="mt-10 inline-flex border-b border-charcoal pb-3 text-[0.65rem] uppercase tracking-editorial" to="/collection">
           Continue exploring

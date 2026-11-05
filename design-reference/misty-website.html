@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Misty — Fragrances composed slowly</title>
+<meta name="description" content="Misty makes small-batch Eau de Parfum from rare naturals. Free shipping over ₹999.">
+<link rel="preconnect" href="https://images.pexels.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Hanken+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bone:#EFEBE4; --paper:#F8F6F2; --ink:#14110F; --ink2:#3B342E; --oxblood:#5A1E1E; --brass:#A88B5E; --sage:#8A9080; --line:#D9D2C6;
+  --display:'Cormorant Garamond',Garamond,'Times New Roman',serif;
+  --ui:'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:400 16px/1.7 var(--ui);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--oxblood);outline-offset:3px}
+.wrap{max-width:1360px;margin:0 auto;padding:0 clamp(20px,4vw,56px)}
+.display{font-family:var(--display);font-weight:400;letter-spacing:-.01em;line-height:1.02}
+.lede{font-size:clamp(17px,1.5vw,19px);color:var(--ink2);max-width:46ch}
+.meta{font-size:13px;color:var(--sage);letter-spacing:.02em}
+.btn{display:inline-flex;align-items:center;gap:12px;padding:16px 30px;background:var(--ink);color:var(--paper);font-size:14px;font-weight:500;border-radius:2px;transition:background .4s var(--ease),color .4s var(--ease)}
+.btn:hover{background:var(--oxblood)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+.link{font-size:14px;border-bottom:1px solid currentColor;padding-bottom:3px}
+
+/* announcement + header */
+.ann{background:var(--ink);color:var(--bone);font-size:13px;text-align:center;padding:9px 16px;letter-spacing:.01em}
+.hdr{position:sticky;top:0;z-index:40;background:rgba(248,246,242,.92);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .4s}
+.hdr.scrolled{border-color:var(--line)}
+.hdr .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:76px}
+.hdr nav{display:flex;gap:34px;font-size:14px}
+.hdr nav a{position:relative;padding:6px 0}
+.hdr nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.hdr nav a:hover::after,.hdr nav a[aria-current="page"]::after{transform:scaleX(1)}
+.mark{font-family:var(--display);font-size:38px;font-weight:500;letter-spacing:.04em;text-align:center}
+.tools{justify-self:end;display:flex;gap:26px;font-size:14px;align-items:center}
+.tools a,.tools button{display:inline-flex;align-items:center;gap:6px}
+.badge{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:10px;background:var(--oxblood);color:var(--paper);font-size:11px;padding:0 6px}
+.menu-btn{display:none}
+
+/* pages (single-page app, hash routed) */
+.page{display:none}
+.page.on{display:block;animation:in .7s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* HOME hero */
+.hero{position:relative;height:min(92vh,880px);min-height:580px;color:var(--paper);overflow:hidden;background:var(--ink)}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;transform:scale(1.08);animation:settle 2.4s var(--ease) forwards}
+@keyframes settle{to{transform:scale(1)}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,17,15,.25) 0%,rgba(20,17,15,0) 35%,rgba(20,17,15,.55) 100%)}
+.hero .copy{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:0 clamp(20px,4vw,56px) 56px;display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap}
+.hero h1{font-size:clamp(88px,15vw,230px);line-height:.82;letter-spacing:-.03em;font-weight:400}
+.hero .side{max-width:340px;padding-bottom:12px}
+.hero .side p{color:#E5DED3;margin-bottom:26px}
+.hero .btn{background:var(--paper);color:var(--ink)}
+.hero .btn:hover{background:var(--bone)}
+.hero .reveal{overflow:hidden}
+.hero .reveal span{display:inline-block;transform:translateY(105%);animation:up 1.2s var(--ease) .3s forwards}
+@keyframes up{to{transform:none}}
+
+/* sections */
+.sec{padding:clamp(80px,11vw,150px) 0}
+.sec.tight{padding:clamp(60px,8vw,100px) 0}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(40px,5vw,64px)}
+.sec-h h2{font-size:clamp(40px,5.2vw,76px)}
+
+/* Scent finder: 3 audiences as a horizontal spread */
+.finder{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:clamp(16px,2vw,28px);align-items:end}
+.finder a{position:relative;display:block;overflow:hidden;color:var(--paper);border-radius:2px}
+.finder .ph{aspect-ratio:3/4;overflow:hidden;background:var(--bone)}
+.finder .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.finder a:hover .ph img{transform:scale(1.04)}
+.finder .cap{position:absolute;left:24px;right:24px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end}
+.finder h3{font-size:clamp(30px,3vw,44px)}
+.finder .cap span{font-size:14px;opacity:.9}
+.finder a:first-child .ph{aspect-ratio:3/4.5}
+.finder a:nth-child(2) .ph,.finder a:nth-child(3) .ph{aspect-ratio:3/4}
+.finder a:nth-child(2),.finder a:nth-child(3){margin-bottom:0}
+.finder a:nth-child(2){transform:translateY(60px)}
+.finder a:nth-child(3){transform:translateY(120px)}
+
+/* Featured product: split with large type */
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,7vw,120px);align-items:center}
+.feat .ph{background:var(--bone);aspect-ratio:4/5;overflow:hidden}
+.feat .ph img{width:100%;height:100%;object-fit:cover}
+.feat h2{font-size:clamp(56px,7vw,112px);margin:10px 0 22px}
+.feat .lede{margin-bottom:28px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:36px 0 40px;padding-top:26px;border-top:1px solid var(--line)}
+.facts b{display:block;font:500 26px var(--display);margin-bottom:4px}
+.facts span{font-size:13px;color:var(--sage)}
+.price-row{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.price{font:500 34px var(--display)}
+
+/* Notes: dark, intentional */
+.notes{background:var(--oxblood);color:var(--paper)}
+.notes .sec-h h2{color:var(--paper)}
+.notes .lede{color:#E9D9CF}
+.notes-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(255,255,255,.22)}
+.notes-grid div{padding:44px 40px 10px 0;border-right:1px solid rgba(255,255,255,.12)}
+.notes-grid div:last-child{border-right:0}
+.notes-grid div+div{padding-left:40px}
+.notes-grid h3{font-size:36px;margin-bottom:14px}
+.notes-grid p{color:#E9D9CF;font-size:15px;margin-bottom:18px}
+.notes-grid ul{list-style:none;color:var(--paper);font-size:15px;line-height:2}
+
+/* Why Misty: staggered text blocks */
+.why{display:grid;grid-template-columns:1fr 1.25fr;gap:clamp(40px,7vw,120px)}
+.why .ph{background:var(--bone);aspect-ratio:3/4;overflow:hidden;position:sticky;top:110px}
+.why .ph img{width:100%;height:100%;object-fit:cover}
+.why ol{list-style:none;counter-reset:none}
+.why li{padding:36px 0;border-top:1px solid var(--line)}
+.why li:last-child{border-bottom:1px solid var(--line)}
+.why h3{font-size:clamp(28px,2.6vw,38px);margin-bottom:12px}
+.why p{color:var(--ink2);max-width:52ch}
+
+/* FAQ */
+.faq-wrap{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(40px,7vw,120px)}
+details{border-top:1px solid var(--line)}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;padding:24px 0;font:500 24px var(--display);display:flex;justify-content:space-between;align-items:center;gap:20px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";width:12px;height:12px;flex:none;background:linear-gradient(var(--ink),var(--ink)) center/100% 1px no-repeat,linear-gradient(var(--ink),var(--ink)) center/1px 100% no-repeat;transition:transform .4s var(--ease)}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 40px 26px 0;color:var(--ink2);max-width:62ch}
+
+/* Journal teaser (home) */
+.journal{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,40px)}
+.journal a .ph{aspect-ratio:4/3;overflow:hidden;background:var(--bone);margin-bottom:20px}
+.journal img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.journal a:hover img{transform:scale(1.04)}
+.journal h3{font-size:30px;margin-bottom:8px}
+.journal p{color:var(--ink2);font-size:15px}
+
+/* Newsletter */
+.news{background:var(--ink);color:var(--paper);padding:clamp(70px,8vw,110px) 0}
+.news .wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:center}
+.news h2{font-size:clamp(44px,5vw,72px)}
+.news form{display:flex;border-bottom:1px solid #6B6057;padding-bottom:10px}
+.news input{flex:1;background:none;border:0;color:var(--paper);font:inherit;font-size:18px;outline:0;min-width:0}
+.news input::placeholder{color:#8C8176}
+.news button{color:var(--paper);font-weight:500;padding-left:20px}
+.news button:hover{color:var(--brass)}
+.news small{display:block;color:#8C8176;margin-top:16px;font-size:13px}
+
+/* footer */
+footer{background:var(--paper);padding:clamp(70px,8vw,100px) 0 36px;border-top:1px solid var(--line)}
+.fgrid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px}
+footer h4{font-size:14px;font-weight:500;margin-bottom:18px}
+footer ul{list-style:none}footer li{margin-bottom:10px;font-size:15px;color:var(--ink2)}
+footer li a:hover{color:var(--oxblood)}
+.fmark{font-family:var(--display);font-size:72px;line-height:.9;letter-spacing:.02em}
+.fbase{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:70px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--sage)}
+
+/* SHOP */
+.shop-h{padding:clamp(60px,8vw,100px) 0 40px}
+.shop-h h1{font-size:clamp(64px,9vw,140px)}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:10px 18px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--line);font-size:14px;transition:.3s}
+.chip[aria-pressed="true"],.chip:hover{background:var(--ink);color:var(--paper);box-shadow:none}
+.toolbar select{background:none;border:0;font:inherit;font-size:14px;padding:8px 0;cursor:pointer}
+.count{font-size:14px;color:var(--sage);margin:26px 0 30px}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(24px,3vw,44px) clamp(16px,2vw,28px)}
+.pcard{cursor:pointer;display:block}
+.pcard .ph{background:var(--bone);aspect-ratio:4/5;overflow:hidden;position:relative;border-radius:2px}
+.pcard .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.pcard:hover .ph img{transform:scale(1.04)}
+.pcard .add{position:absolute;left:14px;right:14px;bottom:14px;background:var(--paper);padding:14px;text-align:center;font-size:14px;font-weight:500;opacity:0;transform:translateY(8px);transition:.4s var(--ease);border-radius:2px}
+.pcard:hover .add{opacity:1;transform:none}
+.pcard h3{font-size:26px;margin:16px 0 2px}
+.pcard .n{font-size:14px;color:var(--sage)}
+.pcard .pr{font-size:15px;margin-top:6px}
+.pcard .tag{position:absolute;top:14px;left:14px;background:var(--paper);font-size:12px;padding:5px 11px;border-radius:999px}
+
+/* PRODUCT */
+.crumbs{font-size:14px;color:var(--sage);padding:30px 0}
+.crumbs a:hover{color:var(--ink)}
+.pd{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(40px,6vw,100px);align-items:start;padding-bottom:110px}
+.pd .gal{position:sticky;top:110px}
+.pd .main{background:var(--bone);aspect-ratio:4/5;overflow:hidden}
+.pd .main img{width:100%;height:100%;object-fit:cover}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+.thumbs div{background:var(--bone);aspect-ratio:1;overflow:hidden;cursor:pointer;opacity:.6;transition:opacity .3s}
+.thumbs div:hover,.thumbs div.on{opacity:1}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+.pd h1{font-size:clamp(56px,6vw,96px);margin:10px 0 14px}
+.rating{font-size:14px;color:var(--sage);display:flex;gap:10px;align-items:center}
+.pd .price-big{font:500 40px var(--display);margin:26px 0 30px}
+.label{font-size:14px;margin-bottom:12px;display:flex;justify-content:space-between}
+.sizes{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+.sizes button{padding:14px 22px;border-radius:2px;box-shadow:inset 0 0 0 1px var(--line);font-size:14px;transition:.3s}
+.sizes button[aria-pressed="true"]{box-shadow:inset 0 0 0 1.5px var(--ink);background:var(--ink);color:var(--paper)}
+.buy{display:grid;grid-template-columns:auto 1fr;gap:12px;margin-bottom:12px}
+.qty{display:flex;align-items:center;box-shadow:inset 0 0 0 1px var(--line);border-radius:2px}
+.qty button{width:48px;height:56px;font-size:18px}
+.qty span{width:30px;text-align:center}
+.buy .btn{justify-content:center;font-size:15px}
+.wish{width:100%;justify-content:center;margin-top:10px}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:30px 0 34px;padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:14px}
+.trust b{display:block;font-weight:500;margin-bottom:2px}
+.trust span{color:var(--sage)}
+.tabs{display:flex;gap:28px;border-bottom:1px solid var(--line);margin-bottom:26px}
+.tabs button{padding:12px 0;font-size:15px;color:var(--sage);border-bottom:1px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--ink)}
+.tabp{display:none;color:var(--ink2);max-width:60ch}
+.tabp.on{display:block}
+.pyr{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:20px}
+.pyr div{border-top:1px solid var(--line);padding-top:16px}
+.pyr b{display:block;color:var(--ink);font-weight:500;margin-bottom:6px}
+.also{padding:clamp(70px,8vw,110px) 0;background:var(--bone)}
+
+/* CART */
+.cart{display:grid;grid-template-columns:1.6fr 1fr;gap:clamp(40px,6vw,90px);align-items:start;padding:clamp(60px,8vw,100px) 0 110px}
+.cart h1{font-size:clamp(56px,6vw,92px);margin-bottom:40px}
+.line{display:grid;grid-template-columns:110px 1fr auto;gap:24px;padding:26px 0;border-top:1px solid var(--line);align-items:center}
+.line .ph{background:var(--bone);aspect-ratio:1;overflow:hidden}
+.line .ph img{width:100%;height:100%;object-fit:cover}
+.line h3{font-size:28px}
+.line .meta{margin:4px 0 14px}
+.line .row{display:flex;align-items:center;gap:20px;font-size:14px}
+.line .row button{color:var(--sage);text-decoration:underline;text-underline-offset:3px}
+.line .amt{font:500 24px var(--display)}
+.summary{background:var(--bone);padding:34px;position:sticky;top:110px}
+.summary h2{font-size:40px;margin-bottom:22px}
+.summary div{display:flex;justify-content:space-between;padding:12px 0;font-size:15px;border-bottom:1px solid #D4CCBE}
+.summary .total{border:0;font:500 28px var(--display);padding-top:20px}
+.summary .btn{width:100%;justify-content:center;margin-top:24px}
+.empty{padding:120px 0;text-align:center}
+.empty h2{font-size:64px;margin-bottom:20px}
+
+/* CHECKOUT */
+.co{display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(40px,6vw,90px);padding:clamp(60px,8vw,90px) 0 110px;align-items:start}
+.steps{display:flex;gap:26px;font-size:14px;color:var(--sage);margin-bottom:46px;flex-wrap:wrap}
+.steps .on{color:var(--ink);font-weight:500}
+.co h2{font-size:44px;margin:0 0 24px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:20px 18px;margin-bottom:50px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field.full{grid-column:1/-1}
+.field label{font-size:13px;color:var(--ink2)}
+.field input,.field select{font:inherit;font-size:16px;padding:14px 16px;border:1px solid var(--line);background:#fff;border-radius:2px;outline:0;transition:border-color .3s}
+.field input:focus,.field select:focus{border-color:var(--ink)}
+.field .err{color:#A23B2A;font-size:13px;display:none}
+.field.bad input{border-color:#A23B2A}.field.bad .err{display:block}
+.radio{display:flex;gap:14px;flex-direction:column;margin-bottom:36px}
+.radio label{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;border:1px solid var(--line);cursor:pointer;background:#fff;border-radius:2px}
+.radio input{margin-top:4px;accent-color:var(--ink)}
+.radio b{font-weight:500;display:block}
+.radio small{color:var(--sage)}
+.osum{background:var(--bone);padding:34px;position:sticky;top:110px}
+.osum .li{display:grid;grid-template-columns:64px 1fr auto;gap:16px;align-items:center;margin-bottom:18px}
+.osum .li .ph{background:#E2DCD0;aspect-ratio:1;overflow:hidden}
+.osum img{width:100%;height:100%;object-fit:cover}
+
+/* ABOUT */
+.about-hero{padding:clamp(70px,9vw,130px) 0 60px}
+.about-hero h1{font-size:clamp(72px,11vw,190px);line-height:.88;letter-spacing:-.02em}
+.about-hero .lede{margin-top:34px}
+.about-img{height:min(80vh,760px);position:relative;overflow:hidden;background:var(--bone)}
+.about-img img{width:100%;height:100%;object-fit:cover}
+.story{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,100px);padding:clamp(80px,10vw,140px) 0}
+.story p{margin-bottom:22px;color:var(--ink2);max-width:58ch}
+.story p:first-child{font:400 clamp(26px,2.6vw,36px)/1.3 var(--display);color:var(--ink)}
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(30px,4vw,60px)}
+.values div{border-top:1px solid var(--ink);padding-top:20px}
+.values h3{font-size:34px;margin-bottom:10px}
+.values p{color:var(--ink2)}
+.quote{background:var(--ink);color:var(--paper);padding:clamp(80px,10vw,140px) 0}
+.quote blockquote{font:400 clamp(36px,4.6vw,68px)/1.12 var(--display);max-width:22ch;letter-spacing:-.01em}
+.quote cite{display:block;margin-top:34px;font-style:normal;color:#A39A8F;font-size:15px}
+
+/* CONTACT */
+.ct{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(40px,7vw,120px);padding:clamp(70px,9vw,120px) 0 120px}
+.ct h1{font-size:clamp(64px,8vw,130px);margin-bottom:34px}
+.ct dl{margin-top:44px;display:grid;gap:26px}
+.ct dt{font-size:13px;color:var(--sage);margin-bottom:4px}
+.ct dd{font:400 26px var(--display)}
+.ct form{display:grid;gap:26px}
+.ct .field input,.ct .field textarea,.ct .field select{font:inherit;font-size:16px;padding:14px 0;border:0;border-bottom:1px solid var(--line);background:none;outline:0;border-radius:0}
+.ct .field input:focus,.ct .field textarea:focus,.ct .field select:focus{border-bottom-color:var(--ink)}
+.ct textarea{resize:vertical;min-height:120px;font:inherit}
+.ct .field.bad input,.ct .field.bad textarea{border-bottom-color:#A23B2A}
+
+/* ORDERS / ACCOUNT */
+.acct{display:grid;grid-template-columns:240px 1fr;gap:clamp(40px,5vw,80px);padding:clamp(60px,7vw,100px) 0 110px;align-items:start}
+.acct aside a{display:block;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px}
+.acct aside a[aria-current="page"]{font-weight:500}
+.acct h1{font-size:clamp(56px,6vw,88px);margin-bottom:34px}
+.order{border-top:1px solid var(--line);padding:28px 0;display:grid;grid-template-columns:1fr auto;gap:18px}
+.order .thumbs2{display:flex;gap:10px;margin-top:14px}
+.order .thumbs2 div{width:56px;height:56px;background:var(--bone);overflow:hidden}
+.order .thumbs2 img{width:100%;height:100%;object-fit:cover}
+.status{font-size:13px;padding:6px 12px;border-radius:999px;display:inline-block;margin-bottom:12px}
+.s-ok{background:#DCE5D6;color:#2F4A2A}.s-wait{background:#EFE3C7;color:#6B4F1C}.s-no{background:#F1D9D3;color:#7A2B1C}
+.order .r{text-align:right}
+
+/* CONFIRMED */
+.done{min-height:70vh;display:grid;place-items:center;text-align:center;padding:100px 0}
+.done .check{width:76px;height:76px;border-radius:50%;background:var(--brass);color:var(--paper);display:grid;place-items:center;margin:0 auto 34px;font-size:30px}
+.done h1{font-size:clamp(56px,7vw,110px);margin-bottom:22px}
+.done .lede{margin:0 auto 40px}
+.done dl{display:inline-grid;grid-template-columns:auto auto;gap:10px 40px;text-align:left;margin:0 auto 46px;padding:26px 36px;background:var(--bone)}
+.done dd{font-weight:500}
+.done .row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,140%);background:var(--ink);color:var(--paper);padding:15px 26px;font-size:14px;border-radius:2px;z-index:90;transition:transform .6s var(--ease)}
+.toast.on{transform:translate(-50%,0)}
+.drawer-shade{position:fixed;inset:0;background:rgba(20,17,15,.4);opacity:0;pointer-events:none;transition:opacity .5s;z-index:60}
+.drawer-shade.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--paper);z-index:70;transform:translateX(102%);transition:transform .6s var(--ease);padding:34px;display:flex;flex-direction:column}
+.drawer.on{transform:none}
+.drawer header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.drawer h2{font-size:40px}
+.drawer .items{flex:1;overflow:auto}
+.drawer .foot{border-top:1px solid var(--line);padding-top:22px}
+.drawer .foot div{display:flex;justify-content:space-between;font:500 24px var(--display);margin-bottom:18px}
+.drawer .btn{width:100%;justify-content:center}
+
+/* responsive */
+@media (max-width:1000px){
+  .hdr nav{display:none}.hdr .wrap{grid-template-columns:auto 1fr auto}.mark{text-align:left;font-size:32px}
+  .menu-btn{display:inline-block;font-size:14px}
+  .finder{grid-template-columns:1fr}.finder a:nth-child(2),.finder a:nth-child(3){transform:none}
+  .feat,.why,.faq-wrap,.news .wrap,.story,.ct,.co,.cart,.pd,.acct{grid-template-columns:1fr}
+  .pd .gal,.summary,.osum,.why .ph{position:static}
+  .notes-grid,.journal,.values,.pyr{grid-template-columns:1fr}
+  .notes-grid div{padding:30px 0!important;border-right:0;border-bottom:1px solid rgba(255,255,255,.12)}
+  .pgrid{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:clamp(72px,22vw,140px)}
+  .fgrid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .pgrid{grid-template-columns:1fr 1fr;gap:20px 14px}
+  .fields{grid-template-columns:1fr}.facts,.trust{grid-template-columns:1fr}
+  .line{grid-template-columns:84px 1fr}.line .amt{grid-column:2}
+  .hdr .wrap{padding:0 18px}
+  .fgrid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.hero .reveal span{transform:none}}
+</style>
+</head>
+<body>
+
+<div class="ann">Complimentary shipping on orders above ₹999 · Two samples with every order</div>
+
+<header class="hdr" id="hdr">
+  <div class="wrap">
+    <button class="menu-btn" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('x')">Menu</button>
+    <nav id="nav" aria-label="Primary">
+      <a href="#/" data-r="home">Home</a>
+      <a href="#/shop" data-r="shop">Shop</a>
+      <a href="#/about" data-r="about">Our story</a>
+      <a href="#/contact" data-r="contact">Contact</a>
+    </nav>
+    <a href="#/" class="mark" aria-label="Misty home">Misty</a>
+    <div class="tools">
+      <a href="#/account" data-r="account">Account</a>
+      <button id="bagbtn" aria-label="Open bag">Bag <span class="badge" id="bagn">0</span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ HOME ============ -->
+<div class="page" id="p-home">
+  <section class="hero">
+    <img data-img="hero" alt="Amber fragrance bottle on a warm stone surface in soft morning light">
+    <div class="copy">
+      <h1 class="display"><span class="reveal"><span>Misty</span></span></h1>
+      <div class="side">
+        <p>Eau de Parfum composed slowly from rare naturals. Each bottle rests for ninety days before it reaches you.</p>
+        <a class="btn" href="#/shop">Shop the collection →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-h">
+        <h2 class="display">For whom</h2>
+        <a class="link" href="#/shop">View all fragrances</a>
+      </div>
+      <div class="finder">
+        <a href="#/shop" data-cat="Men">
+          <div class="ph"><img data-img="men" alt="Men's fragrance bottle in dark setting" loading="lazy"></div>
+          <div class="cap"><h3 class="display">For him</h3><span>Shop →</span></div>
+        </a>
+        <a href="#/shop" data-cat="Women">
+          <div class="ph"><img data-img="women" alt="Floral perfume bottle with soft petals" loading="lazy"></div>
+          <div class="cap"><h3 class="display">For her</h3><span>Shop →</span></div>
+        </a>
+        <a href="#/shop" data-cat="Unisex">
+          <div class="ph"><img data-img="unisex" alt="Minimal fragrance bottle on neutral backdrop" loading="lazy"></div>
+          <div class="cap"><h3 class="display">Unisex</h3><span>Shop →</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec tight">
+    <div class="wrap feat">
+      <div class="ph"><img data-img="blanche" alt="Blanche Eau de Parfum bottle in clear glass" loading="lazy"></div>
+      <div>
+        <p class="meta">This season's signature</p>
+        <h2 class="display">Blanche</h2>
+        <p class="lede">A transparent, almost weightless scent built on iris and clean musk. It opens soft and stays close, a quiet presence from morning until the last hour of the evening.</p>
+        <div class="price-row"><span class="price">₹1,899</span><a class="btn" href="#/product/blanche">Add to bag</a></div>
+        <div class="facts">
+          <div><b>50 / 100 ml</b><span>Sizes</span></div>
+          <div><b>8–10 h</b><span>Longevity</span></div>
+          <div><b>EDP</b><span>Concentration</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="notes sec">
+    <div class="wrap">
+      <div class="sec-h">
+        <h2 class="display">How it unfolds</h2>
+        <p class="lede">Each composition moves in three stages, so the scent you first notice is never quite the one you finish with.</p>
+      </div>
+      <div class="notes-grid">
+        <div><h3 class="display">Top</h3><p>The first impression. Bright and brief, it lasts about fifteen minutes.</p><ul><li>Bergamot</li><li>Pink pepper</li><li>Neroli</li></ul></div>
+        <div><h3 class="display">Heart</h3><p>The character of the scent. Florals open and warm up on the skin.</p><ul><li>Iris</li><li>Jasmine</li><li>Rose absolute</li></ul></div>
+        <div><h3 class="display">Base</h3><p>What stays. Soft and resinous, it lingers into the next day.</p><ul><li>Oud</li><li>Amber</li><li>Sandalwood</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap why">
+      <div class="ph"><img data-img="why" alt="Glass perfume bottles arranged with botanicals" loading="lazy"></div>
+      <div>
+        <h2 class="display" style="font-size:clamp(44px,5vw,72px);margin-bottom:40px">Why Misty</h2>
+        <ol>
+          <li><h3 class="display">Rare, traceable ingredients</h3><p>We buy absolutes directly from a small number of growers and publish where each one comes from.</p></li>
+          <li><h3 class="display">Made in small batches</h3><p>Perfumers compose each scent in limited runs, so every bottle is finished with the same care.</p></li>
+          <li><h3 class="display">Refillable by design</h3><p>Glass flacons refill from a pouch, which uses far less packaging and keeps your favourite bottle for years.</p></li>
+          <li><h3 class="display">Tested before you commit</h3><p>Every order includes two samples so you can wear a scent for a few days before choosing a size.</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec tight" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-h"><h2 class="display">Notes from the atelier</h2><a class="link" href="#/about">Read the story</a></div>
+      <div class="journal">
+        <a href="#/about"><div class="ph"><img data-img="j1" alt="Jasmine flowers" loading="lazy"></div><h3 class="display">Jasmine, picked at dawn</h3><p>Why the timing of the harvest decides how a floral note smells.</p></a>
+        <a href="#/about"><div class="ph"><img data-img="j2" alt="Amber resin pieces" loading="lazy"></div><h3 class="display">A short guide to amber</h3><p>Resins, labdanum and why the warmest notes last longest.</p></a>
+        <a href="#/about"><div class="ph"><img data-img="j3" alt="Morning light on a bottle" loading="lazy"></div><h3 class="display">Layering without clashing</h3><p>Two scents that work together, and how to test them.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec tight" style="padding-top:0">
+    <div class="wrap faq-wrap">
+      <h2 class="display" style="font-size:clamp(44px,5vw,72px)">Questions</h2>
+      <div>
+        <details open><summary>How long does delivery take?</summary><p>Two to three working days across India. Shipping is free on orders above ₹999.</p></details>
+        <details><summary>Can I return a fragrance?</summary><p>Unopened bottles can be returned within seven days of delivery for a full refund. Opened bottles can be exchanged for a sample of another scent.</p></details>
+        <details><summary>How long does a bottle last?</summary><p>A 50 ml bottle used daily lasts roughly four months. Eau de Parfum typically holds for eight to ten hours on skin.</p></details>
+        <details><summary>Are your fragrances authentic?</summary><p>Every bottle is shipped directly from our atelier with a numbered seal. Scan the code on the box to check it.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="news">
+    <div class="wrap">
+      <div>
+        <h2 class="display">Letters from the atelier</h2>
+        <p class="lede" style="color:#CFC6BA;margin-top:20px">Early access to new scents, and one short letter a month. No noise.</p>
+      </div>
+      <div>
+        <form onsubmit="event.preventDefault();toast('Thank you. Check your inbox.');this.reset()">
+          <input type="email" required placeholder="Your email address" aria-label="Email address">
+          <button type="submit">Subscribe</button>
+        </form>
+        <small>You can unsubscribe at any time.</small>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ SHOP ============ -->
+<div class="page" id="p-shop">
+  <div class="wrap shop-h"><h1 class="display">Shop</h1></div>
+  <div class="wrap">
+    <div class="toolbar">
+      <div class="filters" id="filters" role="group" aria-label="Filter by">
+        <button class="chip" aria-pressed="true" data-f="All">All</button>
+        <button class="chip" aria-pressed="false" data-f="Men">For him</button>
+        <button class="chip" aria-pressed="false" data-f="Women">For her</button>
+        <button class="chip" aria-pressed="false" data-f="Unisex">Unisex</button>
+      </div>
+      <label>Sort <select id="sort"><option value="feat">Featured</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option></select></label>
+    </div>
+    <p class="count" id="count"></p>
+    <div class="pgrid" id="pgrid"></div>
+  </div>
+</div>
+
+<!-- ============ PRODUCT ============ -->
+<div class="page" id="p-product">
+  <div class="wrap">
+    <p class="crumbs"><a href="#/shop">Shop</a> / <span id="pcrumb"></span></p>
+    <div class="pd">
+      <div class="gal">
+        <div class="main"><img id="pmain" alt=""></div>
+        <div class="thumbs" id="pthumbs"></div>
+      </div>
+      <div>
+        <p class="meta" id="pcat"></p>
+        <h1 class="display" id="pname"></h1>
+        <p class="rating">★★★★★ <span>4.9 · 128 reviews</span></p>
+        <p class="lede" style="margin-top:24px" id="pdesc"></p>
+        <p class="price-big" id="pprice"></p>
+        <div class="label"><span>Size</span><span id="psz" class="meta"></span></div>
+        <div class="sizes" id="psizes"></div>
+        <div class="label"><span>Quantity</span></div>
+        <div class="buy">
+          <div class="qty"><button aria-label="Decrease" onclick="qty(-1)">−</button><span id="qn">1</span><button aria-label="Increase" onclick="qty(1)">+</button></div>
+          <button class="btn" onclick="addCurrent()">Add to bag</button>
+        </div>
+        <button class="btn ghost wish" onclick="toast('Saved to your wishlist')">Save to wishlist</button>
+        <div class="trust">
+          <div><b>Free delivery</b><span>Above ₹999</span></div>
+          <div><b>Easy returns</b><span>Within 7 days</span></div>
+          <div><b>Authentic</b><span>Numbered seal</span></div>
+        </div>
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-t="n">Notes</button>
+          <button role="tab" aria-selected="false" data-t="d">Description</button>
+          <button role="tab" aria-selected="false" data-t="s">Shipping</button>
+        </div>
+        <div class="tabp on" data-tp="n">
+          <div class="pyr" id="pyr"></div>
+        </div>
+        <div class="tabp" data-tp="d" id="pdesc2"></div>
+        <div class="tabp" data-tp="s">Free delivery on orders above ₹999, typically in two to three working days. Returns accepted within seven days for unopened bottles.</div>
+      </div>
+    </div>
+  </div>
+  <section class="also">
+    <div class="wrap">
+      <div class="sec-h"><h2 class="display">You may also like</h2><a class="link" href="#/shop">All fragrances</a></div>
+      <div class="pgrid" id="also"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<div class="page" id="p-about">
+  <div class="wrap about-hero">
+    <h1 class="display">Composed<br>in silence.</h1>
+    <p class="lede">Misty began on a grey morning on the Normandy coast, when fog softened the horizon. We wanted to make a fragrance that feels like that moment, and then we kept at it for six years.</p>
+  </div>
+  <div class="about-img"><img data-img="about" alt="Fragrance bottle on stone in warm light"></div>
+  <div class="wrap story">
+    <div><p>Every Misty fragrance starts with a single ingredient. We spend months with it, learn where it grows, and decide which scent it belongs to.</p></div>
+    <div>
+      <p>Compositions are built with independent perfumers in Grasse and rested for ninety days before bottling. Nothing is rushed, and nothing is added to make a scent louder.</p>
+      <p>We publish our ingredient sources, use refillable glass, and ship in recycled cartons. It's slower than most of the industry, and we think that's the point.</p>
+    </div>
+  </div>
+  <section class="sec tight" style="padding-top:0"><div class="wrap values">
+    <div><h3 class="display">Traceable</h3><p>Every absolute is sourced from a named grower, and the origin is printed on the box.</p></div>
+    <div><h3 class="display">Patient</h3><p>Ninety days of rest is the minimum. Good perfume cannot be hurried.</p></div>
+    <div><h3 class="display">Restrained</h3><p>We make fewer scents, and we remove any that don't meet the standard.</p></div>
+  </div></section>
+  <section class="quote"><div class="wrap">
+    <blockquote class="display">A good fragrance should feel like a memory you are only beginning to recall.</blockquote>
+    <cite>Elodie Marchand, founder and master perfumer</cite>
+  </div></section>
+  <section class="sec"><div class="wrap" style="text-align:center"><h2 class="display" style="margin-bottom:34px">Find your scent</h2><a class="btn" href="#/shop">Shop the collection →</a></div></section>
+</div>
+
+<!-- ============ CONTACT ============ -->
+<div class="page" id="p-contact">
+  <div class="wrap ct">
+    <div>
+      <p class="meta">Contact</p>
+      <h1 class="display">Speak with<br>our atelier.</h1>
+      <p class="lede">Questions about a scent, an order or a sample? A real person replies within one working day.</p>
+      <dl>
+        <div><dt>Email</dt><dd>hello@misty-parfums.com</dd></div>
+        <div><dt>Phone</dt><dd>+91 98765 43210</dd></div>
+        <div><dt>Hours</dt><dd>Mon–Sat, 10:00–19:00 IST</dd></div>
+      </dl>
+    </div>
+    <form id="cform" novalidate>
+      <div class="field" data-f="nm"><label for="cn">Name</label><input id="cn" required autocomplete="name"><span class="err">Please enter your name.</span></div>
+      <div class="field" data-f="em"><label for="ce">Email</label><input id="ce" type="email" required autocomplete="email"><span class="err">Enter a valid email address.</span></div>
+      <div class="field"><label for="cs">Topic</label><select id="cs"><option>Order enquiry</option><option>Choosing a fragrance</option><option>Press</option><option>Something else</option></select></div>
+      <div class="field" data-f="ms"><label for="cm">Message</label><textarea id="cm" required></textarea><span class="err">Tell us a little more so we can help.</span></div>
+      <div><button class="btn" type="submit">Send message</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ CART ============ -->
+<div class="page" id="p-cart">
+  <div class="wrap cart">
+    <div>
+      <h1 class="display">Your bag</h1>
+      <div id="cartlines"></div>
+    </div>
+    <aside class="summary" id="cartsum"></aside>
+  </div>
+</div>
+
+<!-- ============ CHECKOUT ============ -->
+<div class="page" id="p-checkout">
+  <div class="wrap co">
+    <div>
+      <nav class="steps" aria-label="Checkout steps"><span>Bag</span><span class="on">Shipping</span><span>Payment</span><span>Confirm</span></nav>
+      <h2 class="display">Delivery</h2>
+      <form id="coform" novalidate>
+        <div class="fields">
+          <div class="field full" data-f="fn"><label for="fn">Full name</label><input id="fn" autocomplete="name"><span class="err">Enter your full name.</span></div>
+          <div class="field full" data-f="fe"><label for="fe">Email</label><input id="fe" type="email" autocomplete="email"><span class="err">Enter a valid email address.</span></div>
+          <div class="field full" data-f="fa"><label for="fa">Address</label><input id="fa" autocomplete="street-address"><span class="err">Enter your address.</span></div>
+          <div class="field" data-f="fc"><label for="fc">City</label><input id="fc" autocomplete="address-level2"><span class="err">Enter your city.</span></div>
+          <div class="field"><label for="fs">State</label><select id="fs"><option>Kerala</option><option>Karnataka</option><option>Tamil Nadu</option><option>Maharashtra</option><option>Delhi</option></select></div>
+          <div class="field" data-f="fp"><label for="fp">PIN code</label><input id="fp" inputmode="numeric" maxlength="6" autocomplete="postal-code"><span class="err">Enter a 6-digit PIN code.</span></div>
+          <div class="field"><label for="fph">Phone</label><input id="fph" type="tel" autocomplete="tel"></div>
+        </div>
+        <h2 class="display" style="margin-top:10px">Payment</h2>
+        <div class="radio">
+          <label><input type="radio" name="pay" checked> <div><b>Cash on delivery</b><small>Pay when your order arrives</small></div></label>
+          <label><input type="radio" name="pay"> <div><b>Card or UPI</b><small>Secure payment, processed by our provider</small></div></label>
+        </div>
+        <button class="btn" type="submit" style="width:100%;justify-content:center">Place order</button>
+      </form>
+    </div>
+    <aside class="osum" id="osum"></aside>
+  </div>
+</div>
+
+<!-- ============ ORDER CONFIRMED ============ -->
+<div class="page" id="p-done">
+  <div class="wrap done">
+    <div>
+      <div class="check" aria-hidden="true">✓</div>
+      <h1 class="display">Thank you.</h1>
+      <p class="lede">Your order is confirmed. We have sent the details to your email, and your bottles will be packed in the atelier within a day.</p>
+      <dl><dt>Order number</dt><dd id="oid"></dd><dt>Total</dt><dd id="ototal"></dd></dl>
+      <div class="row"><a class="btn" href="#/account">View my order</a><a class="btn ghost" href="#/shop">Continue shopping</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ACCOUNT / ORDERS ============ -->
+<div class="page" id="p-account">
+  <div class="wrap acct">
+    <aside>
+      <a href="#/account">Overview</a>
+      <a href="#/account" aria-current="page">My orders</a>
+      <a href="#/account">Profile</a>
+      <a href="#/account">Addresses</a>
+      <a href="#/account">Wishlist</a>
+      <a href="#/">Sign out</a>
+    </aside>
+    <div>
+      <h1 class="display">My orders</h1>
+      <div class="order">
+        <div>
+          <span class="status s-ok">Delivered</span>
+          <h3 class="display" style="font-size:28px">Blanche, 50 ml</h3>
+          <p class="meta">Order MSY1043 · 12 Oct 2026</p>
+          <div class="thumbs2"><div><img data-img="blanche" alt=""></div></div>
+        </div>
+        <div class="r"><p class="meta">Total</p><p class="price">₹1,899</p><button class="link" style="margin-top:14px">View details</button></div>
+      </div>
+      <div class="order">
+        <div>
+          <span class="status s-wait">Processing</span>
+          <h3 class="display" style="font-size:28px">Oud Mirage, 100 ml</h3>
+          <p class="meta">Order MSY1057 · 2 Nov 2026</p>
+          <div class="thumbs2"><div><img data-img="unisex" alt=""></div></div>
+        </div>
+        <div class="r"><p class="meta">Total</p><p class="price">₹2,200</p><button class="link" style="margin-top:14px">View details</button></div>
+      </div>
+      <div class="order">
+        <div>
+          <span class="status s-no">Cancelled</span>
+          <h3 class="display" style="font-size:28px">Citrus Brume, 50 ml</h3>
+          <p class="meta">Order MSY1031 · 28 Sep 2026</p>
+        </div>
+        <div class="r"><p class="meta">Total</p><p class="price">₹1,500</p><button class="link" style="margin-top:14px">View details</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <div class="fmark">Misty</div>
+        <p style="margin-top:20px;max-width:30ch;color:var(--ink2)">Fragrances composed slowly, in small batches, from rare naturals.</p>
+      </div>
+      <div><h4>Shop</h4><ul><li><a href="#/shop">For him</a></li><li><a href="#/shop">For her</a></li><li><a href="#/shop">Unisex</a></li><li><a href="#/shop">Gift sets</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#/about">Our story</a></li><li><a href="#/about">Ingredients</a></li><li><a href="#/about">Sustainability</a></li></ul></div>
+      <div><h4>Help</h4><ul><li><a href="#/contact">Contact</a></li><li><a href="#/contact">Shipping &amp; returns</a></li><li><a href="#/contact">FAQ</a></li><li><a href="#/account">My orders</a></li></ul></div>
+    </div>
+    <div class="fbase"><span>© 2026 Misty Parfums Pvt Ltd</span><span>Privacy · Terms · Accessibility</span></div>
+  </div>
+</footer>
+
+<div class="drawer-shade" id="shade"></div>
+<aside class="drawer" id="drawer" aria-label="Bag" aria-hidden="true">
+  <header><h2 class="display">Bag</h2><button onclick="closeBag()" class="link">Close</button></header>
+  <div class="items" id="dlines"></div>
+  <div class="foot">
+    <div><span>Subtotal</span><span id="dtot">₹0</span></div>
+    <a class="btn" href="#/checkout" onclick="closeBag()">Checkout</a>
+  </div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+
+// ---------- PHOTOS (Pexels) ----------
+// Paste a Pexels image URL into any slot. How: open a photo on pexels.com, right-click the image,
+// "Copy image address". It looks like https://images.pexels.com/photos/1234567/pexels-photo-1234567.jpeg?auto=compress&cs=tinysrgb&w=1600
+// Empty slots show a designed placeholder so the site never looks broken.
+var IMG={
+ hero:'',      // search: https://www.pexels.com/search/perfume%20bottle%20stone/  (wide, dark or warm, space on the left)
+ about:'',     // search: https://www.pexels.com/search/perfumer%20workshop/        (wide)
+ men:'',       // search: https://www.pexels.com/search/men%20cologne/               (portrait)
+ women:'',     // search: https://www.pexels.com/search/women%20perfume%20flowers/   (portrait)
+ unisex:'',    // search: https://www.pexels.com/search/minimal%20perfume%20bottle/  (portrait)
+ why:'',       // search: https://www.pexels.com/search/perfume%20bottles%20botanicals/ (portrait)
+ j1:'',        // search: https://www.pexels.com/search/jasmine%20flowers/
+ j2:'',        // search: https://www.pexels.com/search/amber%20resin/
+ j3:'',        // search: https://www.pexels.com/search/perfume%20morning%20light/
+ // one photo per product (square or 4:5): search pexels.com/search/perfume%20bottle/
+ 'blanche':'','brume-noire':'','aube-blanche':'','santal-veil':'','fleur-ombre':'','citrus-brume':'','ambre-soie':'','oud-mirage':''
+};
+function hsh(k){var h=0;for(var i=0;i<k.length;i++)h=(h*31+k.charCodeAt(i))>>>0;return h}
+function FB(k){
+  var h=hsh(k),T=[['#D8D1C5','#EFEBE4','#14110F'],['#2B2420','#4A3B33','#C9B08A'],['#CFCFC8','#E9E7E1','#3B342E'],['#5A1E1E','#7A2E2A','#E8D9C4'],['#B9B2A3','#DAD3C5','#5A1E1E']][h%5];
+  var wide=/^(hero|about)$/.test(k),W=wide?1600:800,H=wide?900:1000,cx=wide?W*.68:W/2,bh=H*.52,bw=bh*.5,by=H*.82,round=h%2;
+  var body=round?'<circle cx="'+cx+'" cy="'+(by-bw*.62)+'" r="'+bw*.62+'" fill="'+T[2]+'" opacity=".92"/>':'<rect x="'+(cx-bw/2)+'" y="'+(by-bh)+'" width="'+bw+'" height="'+bh+'" rx="10" fill="'+T[2]+'" opacity=".92"/>';
+  var capY=round?by-bw*1.24-bh*.1:by-bh-bh*.14;
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+T[0]+'"/><stop offset="1" stop-color="'+T[1]+'"/></linearGradient><radialGradient id="r" cx=".5" cy=".4" r=".6"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="100%" height="100%" fill="url(#g)"/><rect width="100%" height="100%" fill="url(#r)"/><ellipse cx="'+cx+'" cy="'+(by+8)+'" rx="'+bw*.8+'" ry="'+bw*.09+'" fill="#000" opacity=".22"/>'+body+'<rect x="'+(cx-bw*.2)+'" y="'+capY+'" width="'+bw*.4+'" height="'+bh*.14+'" rx="3" fill="'+(h%5==1?'#C9B08A':'#14110F')+'"/><rect x="'+(cx-bw*.27)+'" y="'+(round?by-bh*.7:by-bh*.62)+'" width="'+bw*.54+'" height="'+bh*.26+'" fill="#F8F6F2" opacity=".95"/><text x="'+cx+'" y="'+((round?by-bh*.7:by-bh*.62)+bh*.15)+'" text-anchor="middle" font-family="Georgia,serif" font-size="'+bh*.07+'" letter-spacing="3" fill="#14110F">MISTY</text></svg>';
+  return 'data:image/svg+xml;utf8,'+encodeURIComponent(svg);
+}
+function IM(k){return IMG[k]||FB(k)}
+function applyImgs(){document.querySelectorAll('img[data-img]').forEach(function(i){if(!i.dataset.done){i.src=IM(i.dataset.img);i.dataset.done=1}})}
+document.addEventListener('error',function(e){var i=e.target;if(i.tagName==='IMG'&&!i.dataset.fb){i.dataset.fb=1;var k=i.dataset.img||(i.closest('a')&&'blanche')||'blanche';i.src=FB(k)}},true);
+
+// ---------- catalogue (replace with your 8 seeded products) ----------
+var PRODUCTS=[
+ {id:'blanche',name:'Blanche',cat:'Unisex',price:1899,sub:'Iris · Clean musk · Pear',desc:'A transparent, almost weightless scent built on iris and clean musk. It opens soft and stays close, a quiet presence from morning until evening.',top:'Pear, pink pepper',heart:'Iris, white flowers',base:'Clean musk, cedarwood',img:'blanche'},
+ {id:'brume-noire',name:'Brume Noire',cat:'Men',price:2150,sub:'Oud · Amber · Smoke',desc:'A deep, smoky oud softened by warm amber and a veil of cool morning air. Built for evenings and cold rooms.',top:'Black pepper, cardamom',heart:'Oud, smoke',base:'Amber, vetiver',img:'brume-noire'},
+ {id:'aube-blanche',name:'Aube Blanche',cat:'Women',price:1650,sub:'Iris · Musk · Pear',desc:'The first light of a clear day. Powdery iris and pear keep the scent gentle and fresh.',top:'Pear, bergamot',heart:'Iris, jasmine',base:'Musk, soft woods',img:'aube-blanche'},
+ {id:'santal-veil',name:'Santal Veil',cat:'Unisex',price:1750,sub:'Sandalwood · Milk · Fig',desc:'Creamy sandalwood and ripe fig, wrapped in a soft milky haze. Warm without ever feeling heavy.',top:'Fig leaf, citrus',heart:'Milky sandalwood',base:'Vanilla, cedar',img:'santal-veil'},
+ {id:'fleur-ombre',name:'Fleur d’Ombre',cat:'Women',price:1700,sub:'Jasmine · Cacao · Vetiver',desc:'A dark, floral scent. Jasmine opens into roasted cacao and dry vetiver, for evenings that run late.',top:'Blackcurrant bud',heart:'Jasmine, cacao',base:'Vetiver, patchouli',img:'fleur-ombre'},
+ {id:'citrus-brume',name:'Citrus Brume',cat:'Men',price:1500,sub:'Bergamot · Neroli · Moss',desc:'Sharp bergamot and neroli over a damp, mossy base. A fresh scent for warm days and early starts.',top:'Bergamot, lemon',heart:'Neroli, green notes',base:'Oakmoss, musk',img:'citrus-brume'},
+ {id:'ambre-soie',name:'Ambre Soie',cat:'Women',price:1800,sub:'Amber · Vanilla · Silk',desc:'Golden amber and a whisper of vanilla over a silky musk. Smooth, warm and easy to wear all day.',top:'Mandarin, saffron',heart:'Amber, rose',base:'Vanilla, silk musk',img:'ambre-soie'},
+ {id:'oud-mirage',name:'Oud Mirage',cat:'Men',price:2200,sub:'Oud · Rose · Saffron',desc:'Rich oud and rose, warmed with saffron. A bold, long-lasting scent that holds its shape in the air.',top:'Saffron, pink pepper',heart:'Rose, oud',base:'Amber, labdanum',img:'oud-mirage'}
+];
+var SIZES=[{ml:50,p:0},{ml:100,p:500}];
+var S={cart:[],cur:null,size:50,q:1,filt:'All',sort:'feat',last:null};
+var $=function(s){return document.querySelector(s)};
+var money=function(n){return '₹'+n.toLocaleString('en-IN')};
+function find(id){return PRODUCTS.filter(function(p){return p.id==id})[0]}
+
+// ---------- router ----------
+var PAGES={home:'p-home',shop:'p-shop',product:'p-product',about:'p-about',contact:'p-contact',cart:'p-cart',checkout:'p-checkout',done:'p-done',account:'p-account'};
+function route(){
+  var h=location.hash.replace(/^#\/?/,'')||'';var parts=h.split('/');var r=parts[0]||'home';
+  if(r==='product'){openProduct(parts[1]);}
+  if(!PAGES[r]) r='home';
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on')});
+  var el=document.getElementById(PAGES[r]);el.classList.add('on');
+  document.querySelectorAll('[data-r]').forEach(function(a){a.toggleAttribute('aria-current',a.dataset.r===r);if(a.dataset.r!==r)a.removeAttribute('aria-current')});
+  if(r==='shop') renderShop();
+  if(r==='cart') renderCart();
+  if(r==='checkout') renderCheckout();
+  window.scrollTo({top:0,behavior:'instant'});applyImgs();
+}
+window.addEventListener('hashchange',route);
+
+// ---------- shop ----------
+function card(p){
+  var cls=p.id==='blanche'?'New':'';
+  return '<a class="pcard" href="#/product/'+p.id+'"><div class="ph"><img src="'+IM(p.img)+'" alt="'+p.name+' Eau de Parfum" loading="lazy">'+(cls?'<span class="tag">'+cls+'</span>':'')+'<span class="add">View scent</span></div><h3 class="display">'+p.name+'</h3><div class="n">'+p.sub+'</div><div class="pr">'+money(p.price)+'</div></a>';
+}
+function renderShop(){
+  var list=PRODUCTS.filter(function(p){return S.filt==='All'||p.cat===S.filt});
+  if(S.sort==='lo')list=list.slice().sort(function(a,b){return a.price-b.price});
+  if(S.sort==='hi')list=list.slice().sort(function(a,b){return b.price-a.price});
+  $('#pgrid').innerHTML=list.map(card).join('');
+  $('#count').textContent=list.length+(list.length===1?' fragrance':' fragrances');
+}
+document.getElementById('filters').addEventListener('click',function(e){
+  var b=e.target.closest('.chip');if(!b)return;
+  S.filt=b.dataset.f;document.querySelectorAll('.chip').forEach(function(c){c.setAttribute('aria-pressed',c===b)});renderShop();
+});
+$('#sort').addEventListener('change',function(e){S.sort=e.target.value;renderShop()});
+
+// ---------- product ----------
+function openProduct(id){
+  var p=find(id)||PRODUCTS[0];S.cur=p;S.size=50;S.q=1;
+  $('#pcrumb').textContent=p.name;$('#pcat').textContent=p.cat+' · Eau de Parfum';$('#pname').textContent=p.name;
+  $('#pdesc').textContent=p.desc;$('#pdesc2').textContent=p.desc;$('#pmain').src=IM(p.img);$('#pmain').alt=p.name+' Eau de Parfum';
+  $('#pthumbs').innerHTML='<div class="on"><img src="'+IM(p.img)+'" alt=""></div>';
+  $('#pyr').innerHTML='<div><b>Top</b>'+p.top+'</div><div><b>Heart</b>'+p.heart+'</div><div><b>Base</b>'+p.base+'</div>';
+  $('#qn').textContent=1;drawSizes();
+  $('#also').innerHTML=PRODUCTS.filter(function(x){return x.id!==p.id}).slice(0,4).map(card).join('');
+}
+function drawSizes(){
+  $('#psizes').innerHTML=SIZES.map(function(s){return '<button aria-pressed="'+(s.ml===S.size)+'" onclick="pickSize('+s.ml+')">'+s.ml+' ml · '+money(S.cur.price+s.p)+'</button>'}).join('');
+  $('#psz').textContent=S.size+' ml';
+}
+function pickSize(ml){S.size=ml;drawSizes()}
+function qty(d){S.q=Math.max(1,S.q+d);$('#qn').textContent=S.q}
+function priceOf(p,ml){var s=SIZES.filter(function(x){return x.ml==ml})[0];return p.price+(s?s.p:0)}
+function addCurrent(){
+  if(!S.cur)return;
+  S.cart.push({id:S.cur.id,size:S.size,q:S.q});
+  updateBag();toast(S.cur.name+' added to your bag');openBag();
+}
+document.querySelectorAll('.tabs button').forEach(function(b){b.addEventListener('click',function(){
+  document.querySelectorAll('.tabs button').forEach(function(x){x.setAttribute('aria-selected',x===b)});
+  document.querySelectorAll('.tabp').forEach(function(t){t.classList.toggle('on',t.dataset.tp===b.dataset.t)});
+})});
+
+// ---------- bag drawer ----------
+function totals(){var t=0,n=0;S.cart.forEach(function(l){var p=find(l.id);t+=priceOf(p,l.size)*l.q;n+=l.q});return {t:t,n:n}}
+function updateBag(){var x=totals();$('#bagn').textContent=x.n;$('#dtot').textContent=money(x.t);$('#dlines').innerHTML=S.cart.length?S.cart.map(function(l,i){var p=find(l.id);return '<div class="line" style="grid-template-columns:72px 1fr auto"><div class="ph"><img src="'+IM(p.img)+'" alt=""></div><div><h3 class="display" style="font-size:22px">'+p.name+'</h3><p class="meta">'+l.size+' ml · Qty '+l.q+'</p></div><div class="amt">'+money(priceOf(p,l.size)*l.q)+'</div></div>'}).join(''):'<p class="meta" style="padding:30px 0">Your bag is empty.</p>'}
+function openBag(){$('#drawer').classList.add('on');$('#shade').classList.add('on');$('#drawer').setAttribute('aria-hidden','false')}
+function closeBag(){$('#drawer').classList.remove('on');$('#shade').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true')}
+$('#bagbtn').addEventListener('click',openBag);$('#shade').addEventListener('click',closeBag);
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeBag()});
+
+// ---------- cart ----------
+function renderCart(){
+  var x=totals();
+  $('#cartlines').innerHTML=S.cart.length?S.cart.map(function(l,i){var p=find(l.id);return '<div class="line"><div class="ph"><img src="'+IM(p.img)+'" alt="'+p.name+'"></div><div><h3 class="display">'+p.name+'</h3><p class="meta">'+p.sub+' · '+l.size+' ml</p><div class="row"><span>Qty '+l.q+'</span><button onclick="removeLine('+i+')">Remove</button></div></div><div class="amt">'+money(priceOf(p,l.size)*l.q)+'</div></div>'}).join('')+'<p style="margin-top:30px"><a class="link" href="#/shop">Continue shopping</a></p>':'<div class="empty"><h2 class="display">Your bag is empty</h2><a class="btn" href="#/shop">Shop the collection →</a></div>';
+  $('#cartsum').innerHTML='<h2 class="display">Summary</h2><div><span>Subtotal</span><span>'+money(x.t)+'</span></div><div><span>Shipping</span><span>'+(x.t>=999?'Free':money(99))+'</span></div><div class="total"><span>Total</span><span>'+money(x.t+(x.t>=999||!x.t?0:99))+'</span></div>'+(S.cart.length?'<a class="btn" href="#/checkout">Checkout</a>':'');
+}
+function removeLine(i){S.cart.splice(i,1);updateBag();renderCart()}
+
+// ---------- checkout ----------
+function renderCheckout(){
+  if(!S.cart.length){location.hash='#/cart';return}
+  var x=totals();
+  $('#osum').innerHTML='<h2 class="display" style="font-size:36px;margin-bottom:24px">Your order</h2>'+S.cart.map(function(l){var p=find(l.id);return '<div class="li"><div class="ph"><img src="'+IM(p.img)+'" alt=""></div><div><b style="font-weight:500">'+p.name+'</b><div class="meta">'+l.size+' ml · Qty '+l.q+'</div></div><div>'+money(priceOf(p,l.size)*l.q)+'</div></div>'}).join('')+'<div style="border-top:1px solid #D4CCBE;padding-top:18px;margin-top:6px"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><span>Subtotal</span><span>'+money(x.t)+'</span></div><div style="display:flex;justify-content:space-between;font:500 26px var(--display)"><span>Total</span><span>'+money(x.t+(x.t>=999?0:99))+'</span></div></div>';
+}
+function validField(id,ok){var f=document.querySelector('[data-f="'+id+'"]');if(f)f.classList.toggle('bad',!ok);return ok}
+document.getElementById('coform').addEventListener('submit',function(e){
+  e.preventDefault();
+  var ok=true;
+  ok=validField('fn',$('#fn').value.trim().length>2)&&ok;
+  ok=validField('fe',/^\S+@\S+\.\S+$/.test($('#fe').value))&&ok;
+  ok=validField('fa',$('#fa').value.trim().length>5)&&ok;
+  ok=validField('fc',$('#fc').value.trim().length>1)&&ok;
+  ok=validField('fp',/^\d{6}$/.test($('#fp').value))&&ok;
+  if(!ok){toast('Please correct the highlighted fields');return}
+  var x=totals();S.orderId='MSY'+(1100+Math.floor(Math.random()*800));
+  $('#oid').textContent=S.orderId;$('#ototal').textContent=money(x.t+(x.t>=999?0:99));
+  S.cart=[];updateBag();location.hash='#/done';
+});
+// cart is cleared on success; the done page reads $('#oid')
+
+// ---------- contact ----------
+document.getElementById('cform').addEventListener('submit',function(e){
+  e.preventDefault();
+  var ok=validField('nm',$('#cn').value.trim().length>1);
+  ok=validField('em',/^\S+@\S+\.\S+$/.test($('#ce').value))&&ok;
+  ok=validField('ms',$('#cm').value.trim().length>5)&&ok;
+  if(!ok){toast('Please check the highlighted fields');return}
+  toast('Thank you. We will reply within one working day.');this.reset();
+});
+
+// ---------- header + toast ----------
+window.addEventListener('scroll',function(){$('#hdr').classList.toggle('scrolled',scrollY>8)},{passive:true});
+var tt;function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},2600)}
+
+// ---------- init ----------
+document.getElementById('sort').value='feat';
+document.querySelectorAll('[data-cat]').forEach(function(a){a.addEventListener('click',function(){S.filt=a.dataset.cat})});
+if(!location.hash)location.hash='#/';
+route();updateBag();applyImgs();
+</script>
+</body>
+</html>

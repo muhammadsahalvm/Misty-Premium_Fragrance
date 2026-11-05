@@ -9,11 +9,12 @@ import {
   logout as clearSession,
   register as createAccount,
 } from '../services/auth'
-import { getCart } from '../services/commerce'
+import { getCart, getWishlist } from '../services/commerce'
 
 export function AppProvider({ children }) {
   const [user, setUser] = useState(null)
   const [cart, setCart] = useState(null)
+  const [wishlist, setWishlist] = useState(null)
   const [accessToken, setAccessToken] = useState(localStorage.getItem(ACCESS_TOKEN_KEY))
   const [authLoading, setAuthLoading] = useState(Boolean(localStorage.getItem(ACCESS_TOKEN_KEY)))
 
@@ -22,6 +23,7 @@ export function AppProvider({ children }) {
     setAccessToken(null)
     setUser(null)
     setCart(null)
+    setWishlist(null)
   }
 
   useEffect(() => {
@@ -39,6 +41,7 @@ export function AppProvider({ children }) {
   useEffect(() => {
     if (user) {
       getCart().then(setCart).catch(() => setCart(null))
+      getWishlist().then(setWishlist).catch(() => setWishlist(null))
     }
   }, [user])
 
@@ -81,6 +84,8 @@ export function AppProvider({ children }) {
         setUser,
         cart,
         setCart,
+        wishlist,
+        setWishlist,
         accessToken,
         authLoading,
         login,

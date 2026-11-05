@@ -1,8 +1,10 @@
 :root {
-  --misty-ivory: #f7f3ed;
-  --misty-beige: #e8ded0;
-  --misty-charcoal: #272522;
-  --misty-champagne: #b69a78;
-  --misty-champagne-soft: #d7c5ae;
-  --misty-line: rgba(39, 37, 34, 0.16);
+  --misty-bone: #efebe4;
+  --misty-paper: #f8f6f2;
+  --misty-ink: #14110f;
+  --misty-secondary-ink: #3b342e;
+  --misty-oxblood: #5a1e1e;
+  --misty-brass: #a88b5e;
+  --misty-sage: #8a9080;
+  --misty-divider: #d9d2c6;
 }

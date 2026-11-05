@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function ImagePanel({ src, alt, className = '', position = 'center' }) {
+function ImagePanel({ src, alt, className = '', position = 'center', priority = false }) {
   const [hasError, setHasError] = useState(false)
 
   return (
@@ -15,7 +15,9 @@ function ImagePanel({ src, alt, className = '', position = 'center' }) {
           alt={alt}
           className="h-full w-full object-cover"
           style={{ objectPosition: position }}
-          loading="lazy"
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          decoding="async"
           onError={() => setHasError(true)}
         />
       )}

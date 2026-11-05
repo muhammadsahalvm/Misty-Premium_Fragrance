@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-  color: #272522;
-  background: #f7f3ed;
-  font-family: Inter, 'Helvetica Neue', Arial, sans-serif;
+  color: #14110f;
+  background: #f8f6f2;
+  font-family: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -17,13 +17,14 @@
 }
 
 html {
-  background: #f7f3ed;
+  background: #f8f6f2;
+  scroll-behavior: smooth;
 }
 
 body {
   min-width: 320px;
   margin: 0;
-  background: #f7f3ed;
+  background: #f8f6f2;
 }
 
 button,
@@ -33,6 +34,6 @@ a {
 
 button:focus-visible,
 a:focus-visible {
-  outline: 2px solid #b69a78;
+  outline: 2px solid #5a1e1e;
   outline-offset: 4px;
 }

@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import { getWishlist, removeWishlistItem } from '../services/commerce'
+import { useAppContext } from '../context/useAppContext'
 
 function WishlistPage() {
-  const [wishlist, setWishlist] = useState(null)
+  const { wishlist, setWishlist } = useAppContext()
   const [error, setError] = useState('')
   const [removing, setRemoving] = useState(null)
-  useEffect(() => { getWishlist().then(setWishlist).catch(() => setError('Your wishlist is unavailable right now.')) }, [])
+  useEffect(() => {
+    if (wishlist) return
+    getWishlist().then(setWishlist).catch(() => setError('Your wishlist is unavailable right now.'))
+  }, [setWishlist, wishlist])
   if (error) return <div className="page-center" role="alert">{error}</div>
   if (!wishlist) return <div className="page-center">Loading your wishlist…</div>
   async function remove(id) {

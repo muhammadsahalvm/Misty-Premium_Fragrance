@@ -1,15 +1,16 @@
 @import './tokens.css';
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Hanken+Grotesk:wght@300;400;500&display=swap');
 
 .eyebrow {
-  @apply font-sans text-[0.65rem] font-medium uppercase tracking-editorial text-champagne;
+  @apply font-sans text-[0.68rem] font-medium uppercase tracking-editorial text-brass;
 }
 
 .editorial-title {
-  @apply font-editorial text-4xl font-normal leading-[0.98] tracking-[-0.03em] text-charcoal sm:text-6xl;
+  @apply font-editorial text-4xl font-normal leading-[0.98] tracking-[-0.02em] text-ink sm:text-6xl;
 }
 
 .button {
-  @apply inline-flex items-center justify-center border border-charcoal bg-charcoal px-6 py-3 text-[0.65rem] uppercase tracking-editorial text-ivory transition-colors hover:border-champagne hover:bg-champagne disabled:cursor-not-allowed disabled:opacity-50;
+  @apply inline-flex items-center justify-center rounded-[2px] border border-ink bg-ink px-6 py-3 text-[0.65rem] uppercase tracking-editorial text-ivory transition-colors hover:border-oxblood hover:bg-oxblood disabled:cursor-not-allowed disabled:opacity-50;
 }
 
 .field {
@@ -21,5 +22,14 @@
 }
 
 .filter {
-  @apply mt-2 w-full border-b border-charcoal/20 bg-transparent py-2 text-sm text-charcoal outline-none;
+  @apply mt-2 w-full rounded-[2px] border border-divider bg-paper px-3 py-3 text-sm text-ink outline-none transition-colors focus:border-oxblood focus:ring-1 focus:ring-oxblood;
+}
+
+.filter option {
+  background: #f8f6f2;
+  color: #14110f;
+}
+
+.price-range {
+  @apply h-1 w-full cursor-pointer appearance-none rounded-full bg-divider accent-oxblood;
 }
