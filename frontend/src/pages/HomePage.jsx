@@ -54,7 +54,7 @@ function HomePage() {
         if (!active) return
 
         if (productResult.status === 'fulfilled') {
-          setProducts(productResult.value)
+          setProducts(productResult.value.results || productResult.value)
           setCatalogueState('ready')
         } else {
           setCatalogueState('error')

@@ -6,11 +6,16 @@ export async function fetchProducts(params = {}) {
   })
 
   if (Array.isArray(data)) {
-    return data
+    return {
+      results: data,
+      count: data.length,
+      next: null,
+      previous: null,
+    }
   }
 
   if (Array.isArray(data.results)) {
-    return data.results
+    return data
   }
 
   throw new Error('Catalogue products response has an invalid shape')
