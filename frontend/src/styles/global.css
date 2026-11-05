@@ -1,0 +1,25 @@
+@import './tokens.css';
+
+.eyebrow {
+  @apply font-sans text-[0.65rem] font-medium uppercase tracking-editorial text-champagne;
+}
+
+.editorial-title {
+  @apply font-editorial text-4xl font-normal leading-[0.98] tracking-[-0.03em] text-charcoal sm:text-6xl;
+}
+
+.button {
+  @apply inline-flex items-center justify-center border border-charcoal bg-charcoal px-6 py-3 text-[0.65rem] uppercase tracking-editorial text-ivory transition-colors hover:border-champagne hover:bg-champagne disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.field {
+  @apply w-full border-0 border-b border-charcoal/25 bg-transparent px-0 py-3 text-sm capitalize outline-none placeholder:text-charcoal/45 focus:border-charcoal;
+}
+
+.page-center {
+  @apply px-6 py-32 text-center text-sm text-charcoal/55;
+}
+
+.filter {
+  @apply mt-2 w-full border-b border-charcoal/20 bg-transparent py-2 text-sm text-charcoal outline-none;
+}

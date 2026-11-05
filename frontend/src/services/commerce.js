@@ -1,0 +1,18 @@
+import api from './api'
+
+export const getCart = () => api.get('/cart/').then(({ data }) => data)
+export const addCartItem = (payload) => api.post('/cart/items/', payload).then(({ data }) => data)
+export const updateCartItem = (id, payload) => api.patch(`/cart/items/${id}/`, payload).then(({ data }) => data)
+export const removeCartItem = (id) => api.delete(`/cart/items/${id}/`).then(({ data }) => data)
+export const clearCart = () => api.delete('/cart/clear/').then(({ data }) => data)
+export const getWishlist = () => api.get('/wishlist/').then(({ data }) => data)
+export const addWishlistItem = (product_id) => api.post('/wishlist/items/', { product_id }).then(({ data }) => data)
+export const removeWishlistItem = (id) => api.delete(`/wishlist/items/${id}/`).then(({ data }) => data)
+export const clearWishlist = () => api.delete('/wishlist/clear/').then(({ data }) => data)
+export const getAddresses = () => api.get('/addresses/').then(({ data }) => data)
+export const saveAddress = (payload, id) => (id ? api.patch(`/addresses/${id}/`, payload) : api.post('/addresses/', payload)).then(({ data }) => data)
+export const deleteAddress = (id) => api.delete(`/addresses/${id}/`)
+export const getOrders = () => api.get('/orders/').then(({ data }) => data)
+export const getOrder = (id) => api.get(`/orders/${id}/`).then(({ data }) => data)
+export const checkout = (address_id) => api.post('/orders/checkout/', { address_id }).then(({ data }) => data)
+export const cancelOrder = (id) => api.post(`/orders/${id}/cancel/`).then(({ data }) => data)

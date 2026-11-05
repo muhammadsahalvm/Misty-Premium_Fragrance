@@ -5,7 +5,8 @@ Only read‑only endpoints are exposed – customers cannot modify data.
 
 from django.db.models import Prefetch, Q, Min, Exists, OuterRef
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, filters
+from rest_framework import filters, generics
+from rest_framework.permissions import AllowAny
 from rest_framework.pagination import PageNumberPagination
 from .models import Category, Collection, Product, ProductVariant, ProductImage
 from .serializers import (
@@ -21,7 +22,7 @@ from .serializers import (
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.filter(is_active=True).order_by("name")
     serializer_class = CategorySerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
 # ---------------------------------------------------------------------------
 # Collection list
@@ -30,7 +31,7 @@ class CategoryListView(generics.ListAPIView):
 class CollectionListView(generics.ListAPIView):
     queryset = Collection.objects.filter(is_active=True).order_by("sort_order", "name")
     serializer_class = CollectionSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
 # ---------------------------------------------------------------------------
 # Product list with filters & search
@@ -42,7 +43,7 @@ class ProductPagination(PageNumberPagination):
 
 class ProductListView(generics.ListAPIView):
     serializer_class = ProductSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
     pagination_class = ProductPagination
 
     # DRF built‑in filters for search and ordering (no extra deps)
@@ -154,7 +155,7 @@ class ProductDetailView(generics.RetrieveAPIView):
     )
 
     serializer_class = ProductSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
     lookup_field = "slug"
     lookup_url_kwarg = "slug"
 

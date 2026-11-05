@@ -4,7 +4,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from .models import Category, Product, ProductVariant
+from .models import Category, Collection, Product, ProductVariant
 
 
 class ProductListAPITests(APITestCase):
@@ -100,3 +100,43 @@ class ProductListAPITests(APITestCase):
             [product["name"] for product in response.data["results"]],
             ["Test Perfume 1", "Test Perfume 3", "Test Perfume 2"],
         )
+
+
+class PublicCatalogueAccessTests(APITestCase):
+    def setUp(self):
+        self.category = Category.objects.create(
+            name="Public Category",
+            slug="public-category",
+        )
+        self.collection = Collection.objects.create(
+            name="Public Collection",
+            slug="public-collection",
+        )
+        self.product = Product.objects.create(
+            category=self.category,
+            name="Public Perfume",
+            slug="public-perfume",
+        )
+        self.product.collections.add(self.collection)
+        ProductVariant.objects.create(
+            product=self.product,
+            sku="PUBLIC-50",
+            size_ml=50,
+            price=Decimal("150.00"),
+        )
+
+    def test_unauthenticated_user_can_access_all_public_catalogue_endpoints(self):
+        endpoints = [
+            reverse("catalogue:category-list"),
+            reverse("catalogue:collection-list"),
+            reverse("catalogue:product-list"),
+            reverse(
+                "catalogue:product-detail",
+                kwargs={"slug": self.product.slug},
+            ),
+        ]
+
+        for endpoint in endpoints:
+            with self.subTest(endpoint=endpoint):
+                response = self.client.get(endpoint)
+                self.assertEqual(response.status_code, status.HTTP_200_OK)
