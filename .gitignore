@@ -59,6 +59,3 @@ dist-ssr/
 *.sublime-workspace
 .DS_Store
 Thumbs.db
-
-
-/backend/certs/ca.pem
