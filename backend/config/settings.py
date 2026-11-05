@@ -108,17 +108,26 @@ DB_HOST = DATABASES["default"]["HOST"].strip().lower()
 DB_PORT = str(DATABASES["default"]["PORT"]).strip()
 LOCAL_MYSQL_HOSTS = {"127.0.0.1", "localhost", "::1"}
 IS_LOCAL_MYSQL = DB_HOST in LOCAL_MYSQL_HOSTS and DB_PORT == "3306"
+IS_LINUX = sys.platform.startswith("linux")
+SYSTEM_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt"
 
-# TiDB Cloud Serverless requires TLS. Its public certificate chain is trusted
-# by the system/client trust store.
+# TiDB Cloud Serverless requires TLS. Render's Linux image provides the
+# trusted system CA bundle used for hostname and certificate verification.
 if not IS_LOCAL_MYSQL:
-    db_ssl_mode = os.getenv("DB_SSL_MODE", "REQUIRED").strip().upper()
-    if db_ssl_mode != "REQUIRED":
+    default_ssl_mode = "VERIFY_IDENTITY" if IS_LINUX else "REQUIRED"
+    db_ssl_mode = os.getenv("DB_SSL_MODE", default_ssl_mode).strip().upper()
+    if db_ssl_mode not in {"REQUIRED", "VERIFY_IDENTITY"}:
         raise RuntimeError(
-            "DB_SSL_MODE must be REQUIRED for TiDB Cloud Serverless"
+            "DB_SSL_MODE must be REQUIRED or VERIFY_IDENTITY for TiDB Cloud Serverless"
         )
 
     DATABASES["default"]["OPTIONS"]["ssl_mode"] = db_ssl_mode
+    if IS_LINUX and db_ssl_mode == "VERIFY_IDENTITY":
+        if not Path(SYSTEM_CA_BUNDLE).is_file():
+            raise RuntimeError(
+                f"System CA bundle is required for VERIFY_IDENTITY: {SYSTEM_CA_BUNDLE}"
+            )
+        DATABASES["default"]["OPTIONS"]["ssl"] = {"ca": SYSTEM_CA_BUNDLE}
 
 # Use isolated in-memory SQLite database during automated test execution
 # to preserve production/development data and allow test suite execution without root MySQL privileges
